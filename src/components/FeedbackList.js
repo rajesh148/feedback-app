@@ -1,18 +1,21 @@
 import React, { useContext } from "react";
 import FeedbackItem from "./FeedbackItem";
 import FeedbackContext from "./context/FeedbackContext";
+import Spinner from "./shared/Spinner";
 
 const FeedbackList = () => {
-  const { feedback } = useContext(FeedbackContext);
-  return (
+  const { feedback, isLoading } = useContext(FeedbackContext);
+  if (!isLoading && (!feedback || feedback.length === 0)) {
+    return <p>No feedback found</p>;
+  }
+
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className="feedback-list">
-      {feedback && feedback.length > 0 ? (
-        feedback.map((feedbackItem) => (
-          <FeedbackItem key={feedbackItem.id} item={feedbackItem} />
-        ))
-      ) : (
-        <div>No feedback found</div>
-      )}
+      {feedback.map((feedbackItem) => (
+        <FeedbackItem key={feedbackItem.id} item={feedbackItem} />
+      ))}
     </div>
   );
 };
